@@ -116,15 +116,18 @@ this achieved by joining on activity_code the data frames activity_labels and a 
 x_merged <- subset(merge(activity_labels,cbind(subjects_full,y_full, x_extract), by = "activity_code"), select= -activity_code)
 ```
 
-### From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+### From the data set x_merged, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 create a wide data set x_tidy with the means for each variable by subject and activity
+the function ddply (plyr library) is used to compute the mean on all the variables of x_merged exept the 2 firsts that list the subjects and activities; these varible are renamed subject and activity:label respectively
+
 ```{r}
 x_tidy <- ddply(x_merged[,3:length(names(x_merged))], .(subject=x_merged$subjects, activity_label=x_merged$activity_label), function(x) apply(x,2,mean))
 ```
 ### Transform into a long data set
 
-the two first columns of the x_tidy data frame are kept as is, from the 3rd to the last column the headers are mapped to the new variable "feature" and the means to "mean"
+the two first columns of the x_tidy data frame are kept as is, from the 3rd to the last column, the headers are mapped to the new variable "feature" and the means to "mean"
+the function gather (tidyr library) gets used for this transformation 
 
 ```{r}
 x_tidy_long <- gather(x_tidy, feature, mean, 3:length(names(x_tidy)))
