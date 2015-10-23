@@ -1,133 +1,103 @@
-#install libraries if needed and load them
-```{r}
-if(!"plyr" %in% installed.packages()) install.packages("plyr")
-if(!"tidyr" %in% installed.packages()) install.packages("tidyr")
-library(plyr)
-library(tidyr)
-```
+## Data Dictionary x_tidy.txt
 
-#read the zip file and unzip
+### subject
+    subject number
+        1..30
 
-the zip file need to be downloaded first into the working directory
-```{r}
-datafiles <- unzip("getdata-projectfiles-UCI HAR Dataset.zip")
-```
+### activity_label
+    label of the performed activity
+       1 WALKING
+       2 WALKING_UPSTAIRS
+       3 WALKING_DOWNSTAIRS
+       4 SITTING
+       5 STANDING
+       6 LAYING
 
-#extract the relevant files from the zip archive
+### feature (only those kept from the original list)
+    name of the variable 
+       tBodyAcc-mean()-X
+       tBodyAcc-mean()-Y
+       tBodyAcc-mean()-Z
+       tBodyAcc-std()-X
+       tBodyAcc-std()-Y
+       tBodyAcc-std()-Z
+       tGravityAcc-mean()-X
+       tGravityAcc-mean()-Y
+       tGravityAcc-mean()-Z
+       tGravityAcc-std()-X
+       tGravityAcc-std()-Y
+       tGravityAcc-std()-Z
+       tBodyAccJerk-mean()-X
+       tBodyAccJerk-mean()-Y
+       tBodyAccJerk-mean()-Z
+       tBodyAccJerk-std()-X
+       tBodyAccJerk-std()-Y
+       tBodyAccJerk-std()-Z
+       tBodyGyro-mean()-X
+       tBodyGyro-mean()-Y
+       tBodyGyro-mean()-Z
+       tBodyGyro-std()-X
+       tBodyGyro-std()-Y
+       tBodyGyro-std()-Z
+       tBodyGyroJerk-mean()-X
+       tBodyGyroJerk-mean()-Y
+       tBodyGyroJerk-mean()-Z
+       tBodyGyroJerk-std()-X
+       tBodyGyroJerk-std()-Y
+       tBodyGyroJerk-std()-Z
+       tBodyAccMag-mean()
+       tBodyAccMag-std()
+       tGravityAccMag-mean()
+       tGravityAccMag-std()
+       tBodyAccJerkMag-mean()
+       tBodyAccJerkMag-std()
+       tBodyGyroMag-mean()
+       tBodyGyroMag-std()
+       tBodyGyroJerkMag-mean()
+       tBodyGyroJerkMag-std()
+       fBodyAcc-mean()-X
+       fBodyAcc-mean()-Y
+       fBodyAcc-mean()-Z
+       fBodyAcc-std()-X
+       fBodyAcc-std()-Y
+       fBodyAcc-std()-Z
+       fBodyAcc-meanFreq()-X
+       fBodyAcc-meanFreq()-Y
+       fBodyAcc-meanFreq()-Z
+       fBodyAccJerk-mean()-X
+       fBodyAccJerk-mean()-Y
+       fBodyAccJerk-mean()-Z
+       fBodyAccJerk-std()-X
+       fBodyAccJerk-std()-Y
+       fBodyAccJerk-std()-Z
+       fBodyAccJerk-meanFreq()-X
+       fBodyAccJerk-meanFreq()-Y
+       fBodyAccJerk-meanFreq()-Z
+       fBodyGyro-mean()-X
+       fBodyGyro-mean()-Y
+       fBodyGyro-mean()-Z
+       fBodyGyro-std()-X
+       fBodyGyro-std()-Y
+       fBodyGyro-std()-Z
+       fBodyGyro-meanFreq()-X
+       fBodyGyro-meanFreq()-Y
+       fBodyGyro-meanFreq()-Z
+       fBodyAccMag-mean()
+       fBodyAccMag-std()
+       fBodyAccMag-meanFreq()
+       fBodyBodyAccJerkMag-mean()
+       fBodyBodyAccJerkMag-std()
+       fBodyBodyAccJerkMag-meanFreq()
+       fBodyBodyGyroMag-mean()
+       fBodyBodyGyroMag-std()
+       fBodyBodyGyroMag-meanFreq()
+       fBodyBodyGyroJerkMag-mean()
+       fBodyBodyGyroJerkMag-std()
+       fBodyBodyGyroJerkMag-meanFreq()
  
-* features
-* activity_labels
-* x_test
-* y_test
-* subject_test
-* x_train
-* y_train
-* subject_train
+ ## meam
+      average by subject and activity_label for each variable
+      -1.0 ... 1.0
 
-the indexes of the files are found using their full name
 
-```{r}
-features <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/features.txt")])
-activity_labels <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/activity_labels.txt")])
-y_test <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/test/y_test.txt")])
-x_test <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/test/X_test.txt")])
-subjects_test <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/test/subject_test.txt")])
-y_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/y_train.txt")])
-x_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/X_train.txt")])
-subjects_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/subject_train.txt")])
-```
-#rename the columns in activity_labels
 
-* 1 : activity_code
-* 2 : activity_label
-
-```{r}
-names(activity_labels) <- c("activity_code", "activity_label")
-```
-#Merges the training and the test sets to create one data set
-
-append the the train data frame to the test ones for x, y and subjects into the full data frames
-
-* x_full : observations and variables
-* y_full : activity codes for each observation
-* subjects_full : subject number for each observation
-
-```{r}
-x_full <- rbind(x_test, x_train)
-y_full <- rbind(y_test, y_train)
-subjects_full <- rbind(subjects_test, subjects_train)
-```
-#rename the columns in y_full and subjects_full
-
-y_full
-* 1 : activity_code
-
-subject_full
-* 1 : subjects
-
-```{r}
-names(y_full) <- c("activity_code")
-names(subjects_full) <- c("subjects")
-```
-#Extracts only the measurements on the mean and standard deviation for each measurement. 
-
-find column indexes for both type of measurments (mean and std) using grep
-store the indexes in the vectors:
-
-* mean_idx : having the indexes of the columns that contain "mean" in the header text
-* std_idx : having the indexes of the columns that contain "std" in the header text
-
-```{r}
-mean_idx <- grep("mean()+", features[,2])
-std_idx <- grep("std()+", features[,2])
-```
-
-#merge the indexes of the columns to retain in a single vector
-
-create the concatenated vector extract_id using mean_idx and std_idx as sorted indexes of the columns to keep
-
-```{r}
-extract_idx <- sort(c(mean_idx,std_idx))
-#create the data frame with only the relevant columns based on the vector of indexes
-x_extract <-  x_full[,extract_idx]
-```
-
-#Appropriately labels the data set with descriptive variable names
-
-extract the column header (labels) from the features data frame based on the indexes in extract_idx 
-
-```{r}
-#the labels for the variables are taken from the features
-names(x_extract)<- features[extract_idx, 2]
-```
-
-#Uses descriptive activity names to name the activities in the data set
-
-the activity names are taken fron the activity_label data frame
-this achieved by joining on activity_code the data frames activity_labels and a by column concatenated data frame of subjects_full, y_full, x_extract
-
-```{r}
-x_merged <- subset(merge(activity_labels,cbind(subjects_full,y_full, x_extract), by = "activity_code"), select= -activity_code)
-```
-
-#From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-
-create a wide data set x_tidy with the means for each variable by subject and activity
-```{r}
-x_tidy <- ddply(x_merged[,3:length(names(x_merged))], .(subject=x_merged$subjects, activity_label=x_merged$activity_label), function(x) apply(x,2,mean))
-```
-#transform into a long data set
-
-the two first columns of the x_tidy data frame are kept as is, from the 3rd to the last column the headers are mapped to the new variable "feature" and the means to "mean"
-
-```{r}
-x_tidy_long <- gather(x_tidy, feature, mean, 3:length(names(x_tidy)))
-```
-
-#write tidy data file to the working directory as csv file
-
-* x_tidy.txt file (tab delimited) 
-
-```{r}
-write.table(data_long, file='x_tidy.txt', row.names = FALSE, sep='\t')
-```
