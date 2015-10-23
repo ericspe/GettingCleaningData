@@ -6,12 +6,12 @@
 
 ### activity_label
     label of the performed activity
-       1 WALKING
-       2 WALKING_UPSTAIRS
-       3 WALKING_DOWNSTAIRS
-       4 SITTING
-       5 STANDING
-       6 LAYING
+       WALKING
+       WALKING_UPSTAIRS
+       WALKING_DOWNSTAIRS
+       SITTING
+       STANDING
+       LAYING
 
 ### feature (only those kept from the original list)
     name of the variable 
@@ -95,8 +95,8 @@
        fBodyBodyGyroJerkMag-std()
        fBodyBodyGyroJerkMag-meanFreq()
  
- ## meam
-    average by subject and activity_label for each variable
+ ## mean
+    average by subject and activity_label for each variable (feature)
       -1.0 ... 1.0
 
 
