@@ -2,10 +2,12 @@
 
 ### subject
     subject number
+    
         1..30
 
 ### activity_label
     label of the performed activity
+    
        WALKING
        WALKING_UPSTAIRS
        WALKING_DOWNSTAIRS
@@ -15,6 +17,7 @@
 
 ### feature (only those kept from the original list)
     name of the variable 
+    
        tBodyAcc-mean()-X
        tBodyAcc-mean()-Y
        tBodyAcc-mean()-Z
@@ -97,6 +100,7 @@
  
  ## mean
     average by subject and activity_label for each variable (feature)
+    
       -1.0 ... 1.0
 
 
