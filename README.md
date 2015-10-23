@@ -1,6 +1,6 @@
-## run_analysis.R
+#run_analysis.R
 
-#Install libraries if needed and load them
+##Install libraries if needed and load them
 ```{r}
 if(!"plyr" %in% installed.packages()) install.packages("plyr")
 if(!"tidyr" %in% installed.packages()) install.packages("tidyr")
@@ -8,14 +8,14 @@ library(plyr)
 library(tidyr)
 ```
 
-#Read the zip file and unzip
+##Read the zip file and unzip
 
 the zip file need to be downloaded first into the working directory
 ```{r}
 datafiles <- unzip("getdata-projectfiles-UCI HAR Dataset.zip")
 ```
 
-#Extract the relevant files from the zip archive
+##Extract the relevant files from the zip archive
  
 * features
 * activity_labels
@@ -38,7 +38,7 @@ y_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/y_tra
 x_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/X_train.txt")])
 subjects_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/train/subject_train.txt")])
 ```
-#Rename the columns in activity_labels
+##Rename the columns in activity_labels
 
 * 1 : activity_code
 * 2 : activity_label
@@ -46,7 +46,7 @@ subjects_train <- read.table(datafiles[which(datafiles =="./UCI HAR Dataset/trai
 ```{r}
 names(activity_labels) <- c("activity_code", "activity_label")
 ```
-#Merges the training and the test sets to create one data set
+##Merge the training and the test sets to create one data set
 
 append the the train data frame to the test ones for x, y and subjects into the full data frames
 
@@ -59,7 +59,7 @@ x_full <- rbind(x_test, x_train)
 y_full <- rbind(y_test, y_train)
 subjects_full <- rbind(subjects_test, subjects_train)
 ```
-#Rename the columns in y_full and subjects_full
+##Rename the columns in y_full and subjects_full
 
 * y_full : activity_code
 * subject_full : subjects
@@ -68,7 +68,7 @@ subjects_full <- rbind(subjects_test, subjects_train)
 names(y_full) <- c("activity_code")
 names(subjects_full) <- c("subjects")
 ```
-#Extracts only the measurements on the mean and standard deviation for each measurement. 
+##Extract only the measurements on the mean and standard deviation for each measurement. 
 
 find column indexes for both type of measurments (mean and std) using grep
 store the indexes in the vectors:
@@ -81,7 +81,7 @@ mean_idx <- grep("mean()+", features[,2])
 std_idx <- grep("std()+", features[,2])
 ```
 
-#Merge the indexes of the columns to retain in a single vector
+##Merge the indexes of the columns to retain in a single vector
 
 create the concatenated vector extract_id using mean_idx and std_idx as sorted indexes of the columns to keep
 
@@ -91,7 +91,7 @@ extract_idx <- sort(c(mean_idx,std_idx))
 x_extract <-  x_full[,extract_idx]
 ```
 
-#Appropriately labels the data set with descriptive variable names
+##Appropriately labels the data set with descriptive variable names
 
 extract the column header (labels) from the features data frame based on the indexes in extract_idx 
 
@@ -100,7 +100,7 @@ extract the column header (labels) from the features data frame based on the ind
 names(x_extract)<- features[extract_idx, 2]
 ```
 
-#Uses descriptive activity names to name the activities in the data set
+##Uses descriptive activity names to name the activities in the data set
 
 the activity names are taken fron the activity_label data frame
 this achieved by joining on activity_code the data frames activity_labels and a by column concatenated data frame of subjects_full, y_full, x_extract
@@ -109,13 +109,13 @@ this achieved by joining on activity_code the data frames activity_labels and a 
 x_merged <- subset(merge(activity_labels,cbind(subjects_full,y_full, x_extract), by = "activity_code"), select= -activity_code)
 ```
 
-#From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+##From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 create a wide data set x_tidy with the means for each variable by subject and activity
 ```{r}
 x_tidy <- ddply(x_merged[,3:length(names(x_merged))], .(subject=x_merged$subjects, activity_label=x_merged$activity_label), function(x) apply(x,2,mean))
 ```
-#Transform into a long data set
+##Transform into a long data set
 
 the two first columns of the x_tidy data frame are kept as is, from the 3rd to the last column the headers are mapped to the new variable "feature" and the means to "mean"
 
@@ -123,7 +123,7 @@ the two first columns of the x_tidy data frame are kept as is, from the 3rd to t
 x_tidy_long <- gather(x_tidy, feature, mean, 3:length(names(x_tidy)))
 ```
 
-#Write tidy data file to the working directory as txt file
+##Write tidy data file to the working directory as txt file
 
 * x_tidy.txt file (tab delimited) 
 
