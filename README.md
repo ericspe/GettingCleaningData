@@ -57,7 +57,7 @@ x_full <- rbind(x_test, x_train)
 y_full <- rbind(y_test, y_train)
 subjects_full <- rbind(subjects_test, subjects_train)
 ```
-#rename the columns in y_full and subjects_full
+#Rename the columns in y_full and subjects_full
 
 * y_full : activity_code
 * subject_full : subjects
