@@ -14,9 +14,9 @@ library(tidyr)
 
 ### Read the zip file and unzip
 
-*the zip file need to be downloaded first into the working directory:
+* the zip file need to be downloaded first into the working directory:
 download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", "getdata-projectfiles-UCI HAR Dataset.zip")
-*the file mane: getdata-projectfiles-UCI HAR Dataset.zip
+* the file mane: getdata-projectfiles-UCI HAR Dataset.zip
 
 ```{r}
 datafiles <- unzip("getdata-projectfiles-UCI HAR Dataset.zip")
