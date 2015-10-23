@@ -1,12 +1,12 @@
 ## Data Dictionary x_tidy.txt
 
 ### subject
-    subject number
+    * subject number
     
         1..30
 
 ### activity_label
-    label of the performed activity
+    * label of the performed activity
     
        WALKING
        WALKING_UPSTAIRS
@@ -16,7 +16,7 @@
        LAYING
 
 ### feature (only those kept from the original list)
-    name of the variable 
+    * name of the variable 
     
        tBodyAcc-mean()-X
        tBodyAcc-mean()-Y
@@ -99,7 +99,7 @@
        fBodyBodyGyroJerkMag-meanFreq()
  
  ## mean
-    average by subject and activity_label for each variable (feature)
+    * average by subject and activity_label for each variable (feature)
     
       -1.0 ... 1.0
 
