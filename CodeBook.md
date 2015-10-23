@@ -96,7 +96,7 @@
        fBodyBodyGyroJerkMag-meanFreq()
  
  ## meam
-      average by subject and activity_label for each variable
+    average by subject and activity_label for each variable
       -1.0 ... 1.0
 
 
