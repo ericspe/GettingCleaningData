@@ -29,8 +29,8 @@ names(subjects_full) <- c("subjects")
 
 #Extracts only the measurements on the mean and standard deviation for each measurement. 
 #find column indexes for both type of measurments (mean and std)
-mean_idx <- grep("mean()+", features[,2])
-std_idx <- grep("std()+", features[,2])
+mean_idx <- grep('mean\\(',features[,2])
+std_idx <- grep('std\\(',features[,2])
 #merge the indexes of the columns to retain in a single vector
 extract_idx <- sort(c(mean_idx,std_idx))
 #create the data frame with only the relevant columns based on the vector of indexes
@@ -50,4 +50,4 @@ x_tidy <- ddply(x_merged[,3:length(names(x_merged))], .(subject=x_merged$subject
 #transform into a long data set
 x_tidy_long <- gather(x_tidy, feature, mean, 3:length(names(x_tidy)))
 #write tidy data file to the working directory as csv file
-write.table(data_long, file='x_tidy.txt', row.names = FALSE, sep='\t')
+write.table(x_tidy_long, file='x_tidy.txt', row.names = FALSE, sep='\t')
