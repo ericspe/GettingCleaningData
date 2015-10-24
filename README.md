@@ -77,15 +77,17 @@ names(subjects_full) <- c("subjects")
 ```
 ### Extract only the measurements on the mean and standard deviation for each measurement. 
 
-find column indexes for both type of measurments (mean and std) using grep
+find column indexes for both type of measurments mean() and std() using grep
 store the indexes in the vectors:
 
 * mean_idx : having the indexes of the columns that contain "mean" in the header text
 * std_idx : having the indexes of the columns that contain "std" in the header text
 
+the variables "meanFreq()" are excluded
+
 ```{r}
-mean_idx <- grep("mean()+", features[,2])
-std_idx <- grep("std()+", features[,2])
+mean_idx <- grep('mean\\(',features[,2])
+std_idx <- grep('std\\(',features[,2])
 ```
 
 ### Merge the indexes of the columns to retain in a single vector
@@ -138,5 +140,5 @@ x_tidy_long <- gather(x_tidy, feature, mean, 3:length(names(x_tidy)))
 * x_tidy.txt file (tab delimited) 
 
 ```{r}
-write.table(data_long, file='x_tidy.txt', row.names = FALSE, sep='\t')
+write.table(x_tidy_long, file='x_tidy.txt', row.names = FALSE, sep='\t')
 ```
