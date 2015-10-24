@@ -90,7 +90,7 @@ mean_idx <- grep('mean\\(',features[,2])
 std_idx <- grep('std\\(',features[,2])
 ```
 
-### Merge the indexes of the columns to retain in a single vector
+### Merge the indexes of the columns to retain in a single vector used to create the data frame x_extract
 
 create the concatenated vector extract_id using mean_idx and std_idx as sorted indexes of the columns to keep
 
@@ -121,7 +121,7 @@ x_merged <- subset(merge(activity_labels,cbind(subjects_full,y_full, x_extract),
 ### From the data set x_merged, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 create a wide data set x_tidy with the means for each variable by subject and activity
-the function ddply (plyr library) is used to compute the mean on all the variables of x_merged exept the 2 firsts that list the subjects and activities; these varible are renamed subject and activity:label respectively
+the function ddply (plyr library) is used to compute the mean on all the variables of x_merged exept the 2 firsts that list the subjects and activities; these varible are renamed subject and activity_label respectively
 
 ```{r}
 x_tidy <- ddply(x_merged[,3:length(names(x_merged))], .(subject=x_merged$subjects, activity_label=x_merged$activity_label), function(x) apply(x,2,mean))
